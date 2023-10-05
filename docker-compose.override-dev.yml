@@ -1,0 +1,19 @@
+services:
+  db:
+    image: mariadb
+    volumes:
+      - ./docker/db/data:/var/lib/mysql
+      - ./docker/db/db-init:/docker-entrypoint-initdb.d
+    env_file:
+      - ./database.env
+
+  web:
+    depends_on:
+      wait-for-db:
+        condition: service_completed_successfully
+
+  wait-for-db:
+    image: atkrad/wait4x
+    command: tcp db:3306 -t 30s -i 250ms -- echo "db is up"
+    depends_on:
+      - db

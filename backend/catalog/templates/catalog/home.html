@@ -1,0 +1,25 @@
+{% extends "catalog/base.html" %}
+
+{% load catalog_tags %}
+
+{% block title %}
+    wiki.carpedia.club
+{% endblock %}
+
+{% block content %}
+    <h1>Подбор автозапчастей по размерам с фото</h1>
+    <p>Только достоверные данные из каталогов и собственные измерения деталей.</p>
+    <p>Наш каталог запчастей представляет собой мощный инструмент для быстрого и точного подбора запчастей для автомобилей различных марок и моделей по размерам. Мы предлагаем широкий выбор, включая детали двигателя, трансмиссии, тормозной системы, подвески и многое другое.</p>
+    {% get_category_groups as category_groups %}
+    {% for category_group in category_groups %}
+        <h2>
+            <a href="{% url 'category_group' category_group.slug %}">
+                {{ category_group.name }}
+            </a>
+        </h2>
+        {% show_categories_cards category_group %}
+        {% if not forloop.last %}
+            <hr>
+        {% endif %}
+    {% endfor %}
+{% endblock %}

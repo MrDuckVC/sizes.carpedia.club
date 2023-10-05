@@ -1,0 +1,66 @@
+{% load catalog_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% load bootstrap5 %}
+    {% block css %}
+        {% bootstrap_css %}
+    {% endblock %}
+    {% block extra_head_code %}
+        {% for code in head_html_code %}
+            {{ code.code|safe }}
+        {% endfor %}
+    {% endblock %}
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">wiki.carpedia.club</a>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    {% get_category_groups as category_groups %}
+                    {% for category_group in category_groups %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                {{ category_group.name }}
+                            </a>
+                            <ul class="dropdown-menu">
+                                {% get_categories category_group as categories %}
+                                {% for category in categories %}
+                                    <li><a class="dropdown-item" href="{% url 'category' category.slug %}">{{ category.name }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    {% block javascript %}
+        {% bootstrap_javascript %}
+    {% endblock %}
+
+    <footer class="bg-light text-center text-lg-start">
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+            &copy; 2023 CarPedia
+        </div>
+    </footer>
+
+    <div class="d-none">
+        {% block extra_body_code %}
+            {% for code in body_html_code %}
+                {{ code.code|safe }}
+            {% endfor %}
+        {% endblock %}
+    </div>
+</body>
+</html>

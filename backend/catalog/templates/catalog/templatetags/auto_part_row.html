@@ -1,0 +1,18 @@
+{% load static %}
+{% load catalog_tags %}
+
+<tr>
+    <td>
+        {% if auto_part.image %}
+            <img src="{{ auto_part.image.url }}" alt="{{ auto_part.number }}" class="img-fluid">
+        {% else %}
+            <img src="{% static 'catalog/images/no_image.png' %}" alt="No image" class="img-fluid">
+        {% endif %}
+    </td>
+    <td><a href="{% url 'auto_part' auto_part.number %}">{{ auto_part.number }}</a></td>
+    <td>{{ auto_part.brand }}</td>
+    <td>{{ auto_part.description|truncatechars:40 }}</td>
+    {% for size in auto_part.category.sizes.all %}
+        <td>{{ auto_part.sizes_values|get_item:size.name }}</td>
+    {% endfor %}
+</tr>

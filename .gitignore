@@ -1,0 +1,18 @@
+# Virtual environment
+venv/
+
+# IDE
+.idea/
+.vscode/
+
+# Docker
+docker-compose.override.yml
+
+# Virtualenv
+database.env
+
+# DB data
+docker/db/data
+
+# Static files
+backend/static/*

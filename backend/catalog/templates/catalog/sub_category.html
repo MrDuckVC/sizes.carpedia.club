@@ -1,0 +1,17 @@
+{% extends "catalog/base.html" %}
+
+{% block title %}
+    category_group.name
+{% endblock %}
+
+{% block content %}
+    <h1>Category Group {{ category_group.name }}</h1>
+    {% get_categories category_group as categories %}
+    {% for category in categories %}
+        <h2>{{ category.name }}</h2>
+        {% get_sub_categories category as sub_categories %}
+        {% for sub_category in sub_categories %}
+            <h3>{{ sub_category.name }}</h3>
+        {% endfor %}
+    {% endfor %}
+{% endblock %}
