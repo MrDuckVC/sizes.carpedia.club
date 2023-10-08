@@ -1,4 +1,13 @@
 services:
+  nginx:
+    build: ./docker/nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - web
+
   web:
     build: ./docker/web
     command: python manage.py runserver 0.0.0.0:8000
