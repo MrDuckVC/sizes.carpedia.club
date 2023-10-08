@@ -13,7 +13,11 @@ def get_category_groups():
 
     :return: List of category groups.
     """
-    return CategoryGroup.objects.all()
+    category_groups = CategoryGroup.objects.all()
+    for category_group in category_groups:
+        if category_group.enabled_categories.count() == 0:
+            category_groups = category_groups.exclude(pk=category_group.pk)
+    return category_groups
 
 
 @register.simple_tag
@@ -24,9 +28,10 @@ def get_categories(category_group: CategoryGroup = None):
     :param category_group: Category group to filter categories by.
     :return: List of categories.
     """
+    categories = Category.objects.filter(enabled=True)
     if category_group:
-        return Category.objects.filter(category_group=category_group)
-    return Category.objects.all()
+        return categories.filter(category_group=category_group)
+    return categories
 
 
 @register.inclusion_tag("catalog/templatetags/categories_cards.html")
@@ -38,7 +43,7 @@ def show_categories_cards(category_group: CategoryGroup = None):
     :return: List of categories.
     """
     if category_group:
-        return {"categories": Category.objects.filter(category_group=category_group)}
+        return {"categories": Category.objects.filter(category_group=category_group, enabled=True).all()}
     return {"categories": Category.objects.all()}
 
 

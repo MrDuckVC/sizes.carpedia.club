@@ -3,7 +3,7 @@ from django.db import models
 from django.db.models import F
 from tidylib import tidy_document
 
-from .utils import slugify
+from .utils import slugify, code_validator
 
 
 class HTMLCodeType(models.TextChoices):
@@ -58,6 +58,10 @@ class CategoryGroup(models.Model):
             self.slug = slugify(self.name)
         super(CategoryGroup, self).save(*args, **kwargs)
 
+    @property
+    def enabled_categories(self):
+        return Category.objects.filter(category_group=self, enabled=True).all()
+
     @classmethod
     def get_default_pk(cls):
         return cls.objects.get_or_create(name="Другое")[0].pk
@@ -87,6 +91,7 @@ class Category(models.Model):
     image = models.ImageField(blank=True, null=True)
     sizes = models.ManyToManyField(Size, blank=True)
     weight = models.IntegerField(blank=True, null=True)
+    enabled = models.BooleanField(default=True)
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -106,8 +111,7 @@ class Category(models.Model):
 class Image(models.Model):
     parsed_status = models.CharField(max_length=20, choices=ParseStatus.choices, default=ParseStatus.NEW)
     link = models.URLField(unique=True, max_length=255)
-    image = models.ImageField(unique=True, blank=True, null=True)
-    # image_blob = models.BinaryField(blank=True, null=True)
+    image = models.ImageField(upload_to="images/%Y/%m/%d", unique=True, blank=True, null=True)
     sha256 = models.CharField(unique=True, max_length=64, blank=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -136,18 +140,6 @@ class AutoPart(models.Model):
 
 
 class ExtraHTMLCode(models.Model):
-    @staticmethod
-    def code_validator(value):
-        document, errors = tidy_document(value, options={
-            "output-xhtml": True,  # Output XHTML.
-            "numeric-entities": True,  # Use numeric entities instead of named entities.
-            "doctype": "omit",  # To ignore <!DOCTYPE html> missing warning.
-            "show-body-only": True,  # To ignore inserting implicit <body> tag and missing <title> tag warnings.
-        })
-        if errors:
-            print(errors)
-            raise ValidationError(errors)
-
     name = models.CharField(max_length=50, unique=True)
     type = models.CharField(max_length=20, choices=HTMLCodeType.choices, default=HTMLCodeType.HEAD)
     code = models.TextField(validators=[code_validator])

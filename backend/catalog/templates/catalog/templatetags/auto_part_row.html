@@ -4,12 +4,12 @@
 <tr>
     <td>
         {% if auto_part.image %}
-            <img src="{{ auto_part.image.url }}" alt="{{ auto_part.number }}" class="img-fluid">
+            <img src="{{ auto_part.image.image.url }}" alt="{{ auto_part.number }}" class="img-fluid">
         {% else %}
             <img src="{% static 'catalog/images/no_image.png' %}" alt="No image" class="img-fluid">
         {% endif %}
     </td>
-    <td><a href="{% url 'auto_part' auto_part.number %}">{{ auto_part.number }}</a></td>
+    <td><a href="{% url 'auto_part' auto_part.id %}">{{ auto_part.number }}</a></td>
     <td>{{ auto_part.brand }}</td>
     <td>{{ auto_part.description|truncatechars:40 }}</td>
     {% for size in auto_part.category.sizes.all %}

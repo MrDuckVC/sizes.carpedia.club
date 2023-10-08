@@ -14,6 +14,8 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
+from django.contrib.staticfiles.urls import static, staticfiles_urlpatterns
 from django.urls import path
 
 from .views import HomeView, CategoryView, CategoryGroupView, AutoPartView, handler404
@@ -24,5 +26,7 @@ urlpatterns = [
     path('', HomeView.as_view(), name='home'),
     path('catalog/category_group/<slug:slug>/', CategoryGroupView.as_view(), name='category_group'),
     path('catalog/category/<slug:slug>/', CategoryView.as_view(), name='category'),
-    path('catalog/auto_part/<str:number>/', AutoPartView.as_view(), name='auto_part'),
-]
+    path('catalog/auto_part/<int:auto_part_id>/', AutoPartView.as_view(), name='auto_part'),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+urlpatterns += staticfiles_urlpatterns()

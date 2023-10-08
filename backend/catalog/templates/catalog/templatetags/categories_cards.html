@@ -1,18 +1,24 @@
+{% load static %}
+
 {% if categories.count > 0 %}
     <div class="row row-cols-1 row-cols-md-4 g-4">
         {% for category in categories %}
             <div class="col">
                 <div class="card h-100">
-                    <img src="https://media.istockphoto.com/id/488844774/vector/vector-car-spares-concept-with-disk-brake.webp?s=2048x2048&w=is&k=20&c=M4KJdTXNzXnysHqG9hifXI4k1ypl9b2mGtZVZPkAAao=" class="card-img-top" alt="TMP Image">
+                    {% if category.image %}
+                        <img src="{{ category.image.url }}" class="card-img-top" alt="{{ category.name }}">
+                    {% else %}
+                        <img src="{% static 'catalog/images/no_image.png' %}" class="card-img-top" alt="No image">
+                    {% endif %}
                     <div class="card-body">
                         <h5 class="card-title">{{ category.name }}</h5>
                         <p class="card-text">{{ category.description }}</p>
-                        <a href="{% url 'category' category.slug %}" class="btn btn-primary">View Products</a>
+                        <a href="{% url 'category' category.slug %}" class="btn btn-primary">Подобрать</a>
                     </div>
                 </div>
             </div>
         {% endfor %}
     </div>
 {% else %}
-    <p>There are no categories present.</p>
+    <p>Пока нет категорий</p>
 {% endif %}

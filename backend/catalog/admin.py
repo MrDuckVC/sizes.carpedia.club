@@ -28,7 +28,7 @@ class CategoryGroupAdmin(admin.ModelAdmin):
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ("name", "category_group", "slug", "weight", "created_at", "updated_at")
+    list_display = ("name", "category_group", "slug", "weight", "enabled", "created_at", "updated_at")
     search_fields = ("name", "category_group__name", "slug")
     prepopulated_fields = {"slug": ("name",)}
 

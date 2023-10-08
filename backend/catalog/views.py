@@ -1,4 +1,5 @@
 from django.core.paginator import Paginator
+from django.http import Http404
 from django.shortcuts import render, get_object_or_404
 from django.views import View
 
@@ -60,13 +61,16 @@ class HomeView(ExtraHTMLCodeMixin, View):
 class CategoryGroupView(ExtraHTMLCodeMixin, View):
     def get(self, request, slug):
         category_group = get_object_or_404(CategoryGroup, slug=slug)
-        return render(
-            request,
-            "catalog/category_group.html",
-            context=self.get_context_data(
-                category_group=category_group,
-            ),
-        )
+        if category_group.enabled_categories.count() >= 1:
+            return render(
+                request,
+                "catalog/category_group.html",
+                context=self.get_context_data(
+                    category_group=category_group,
+                ),
+            )
+        else:
+            raise Http404()
 
 
 class CategoryView(ExtraHTMLCodeMixin, View):
@@ -77,7 +81,7 @@ class CategoryView(ExtraHTMLCodeMixin, View):
         search_by_sizes_form = SearchBySizesForm(category=category, data=request.GET)
 
         # Filter auto parts by sizes.
-        auto_parts = AutoPart.objects.filter(category=category, parsed_status=ParseStatus.DONE)
+        auto_parts = AutoPart.objects.filter(category=category, parsed_status=ParseStatus.NEW)
         if search_by_sizes_form.is_valid():
             for field_name, value in search_by_sizes_form.cleaned_data.items():
                 if value is not None and value != "":
@@ -113,8 +117,8 @@ class CategoryView(ExtraHTMLCodeMixin, View):
 
 
 class AutoPartView(ExtraHTMLCodeMixin, View):
-    def get(self, request, number: str):
-        auto_part = get_object_or_404(AutoPart, number=number)
+    def get(self, request, auto_part_id: int):
+        auto_part = get_object_or_404(AutoPart, pk=auto_part_id)
         return render(
             request,
             "catalog/auto_part.html",
