@@ -1,0 +1,45 @@
+{% extends "catalog/base.html" %}
+
+{% load catalog_tags %}
+{% load static %}
+{% load bootstrap5 %}
+
+{% block title %}
+    {{ auto_part.number }}{% if auto_part.brand %} {{ auto_part.brand }}{% endif %}
+{% endblock %}
+
+{% block content %}
+    <h1>{{ auto_part.number }}{% if auto_part.brand %} {{ auto_part.brand }}{% endif %}</h1>
+
+    <div class="row">
+        <div class="col-md-8">
+            {% if auto_part.image %}
+                <img src="{{ auto_part.image.image.url }}" alt="{{ auto_part.number }}" class="img-fluid">
+            {% else %}
+                <img src="{% static 'catalog/images/no_image.png' %}" alt="No image" class="img-fluid">
+            {% endif %}
+        </div>
+        <div class="col-md-4">
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <th class="table-primary" colspan="2">Размеры</th>
+                </thead>
+                <tbody>
+                    {% for size in auto_part.category.sizes.all %}
+                        <tr>
+                            <td>{{ size.name }}</td>
+                            <td>{{ auto_part.sizes_values|get_item:size.name }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <h2>Описание</h2>
+        <div class="col-md-12">
+            <p>{{ auto_part.description }}</p>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends "catalog/base.html" %}
+
+{% load catalog_tags %}
+
+{% block title %}
+    {{ category_group.name }}
+{% endblock %}
+
+{% block content %}
+    <h1>{{ category_group.name }}</h1>
+    {% show_categories_cards category_group %}
+{% endblock %}

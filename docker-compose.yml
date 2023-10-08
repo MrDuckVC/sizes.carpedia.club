@@ -1,0 +1,20 @@
+services:
+  nginx:
+    build: ./docker/nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - web
+
+  web:
+    build: ./docker/web
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./backend:/code
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./database.env
+      - ./web.env
