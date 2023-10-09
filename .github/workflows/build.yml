@@ -18,6 +18,21 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }} # valentincunev
         password: ${{ secrets.DOCKERHUB_TOKEN }} # dckr_pat_8IQ3hsih3_GzaPr6FNYPVATAfZo
     - name: Build and push
+      # i have docker-compose.override.yml and docker-compose.override-dev.yml
+      # so i need rewite code below
+      # Like this:
+      # uses: docker/build-push-action@v5
+        # with:
+            # push: true
+            # tags: valentincunev/size.carpedia.club:latest
+        # to this:
+      # uses: docker/build-push-action@v5
+        # with:
+            # push: true
+            # tags: valentincunev/size.carpedia.club:latest
+            # context: .
+            # file: docker-compose.yml
+
       uses: docker/build-push-action@v5
       with:
         push: true
