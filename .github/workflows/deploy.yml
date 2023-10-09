@@ -1,0 +1,25 @@
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu:22.04
+    steps:
+    - uses: actions/checkout@v3
+    - name: Create env file
+      run: |
+        echo "${{ secrets.DB_ENV_FILE }}" > database.env
+        echo "${{ secrets.WEB_ENV_FILE }}" > web.env
+    - name: Create docker-compose.override.yml
+      run: |
+        echo "${{ secrets.DOCKER_COMPOSE_CI }}" > docker-compose.override.yml
+    - uses: astappiev/docker-compose-remote-action@master
+      name: Docker-Compose Remote Deployment
+      with:
+        ssh_host: ${{ secrets.DEPLOY_HOST }}
+        ssh_user: ${{ secrets.DEPLOY_USERNAME }}
+        ssh_private_key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
+        ssh_host_public_key: ${{ secrets.DEPLOY_PUBLIC_KEY }}
+        docker_compose_prefix: carpedia
