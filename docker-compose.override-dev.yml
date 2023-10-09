@@ -1,4 +1,12 @@
 services:
+  nginx:
+    restart: unless-stopped
+    image: nginx:alpine
+    volumes:
+      - ./docker/nginx/conf.dev.d:/etc/nginx/conf.d:ro
+    ports:
+      - 8000:80
+
   db:
     image: mariadb
     volumes:
@@ -8,12 +16,15 @@ services:
       - ./database.env
 
   web:
-    depends_on:
-      wait-for-db:
-        condition: service_completed_successfully
+    build:
+      target: runtime_dev
+    ports:
+      - "5678:5678"
 
-  wait-for-db:
-    image: atkrad/wait4x
-    command: tcp db:3306 -t 30s -i 250ms -- echo "db is up"
+  start_dependencies:
+    build: ./docker/start_dependencies
     depends_on:
-      - db
+      - web
+    command: db:3306 /var/run/python/uwsgi.sock
+    volumes:
+      - python_sock:/var/run/python
