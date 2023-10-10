@@ -32,6 +32,7 @@ jobs:
           echo "${{ secrets.DB_ENV_FILE }}" > database.env
     - name: Login to DockerHub using token
       run: |
+        whoami
         docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
     - name: Build and push
       run: |
