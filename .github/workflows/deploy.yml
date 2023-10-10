@@ -30,11 +30,9 @@ jobs:
     - name: Copy database.env
       run: |
           echo "${{ secrets.DB_ENV_FILE }}" > database.env
-    - name: Login to DockerHub
-      uses: docker/login-action@v3
-      with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: Login to DockerHub using token
+      run: |
+        docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
     - name: Build and push
       run: |
         docker-compose -p carpedia -f docker-compose.yml -f docker-compose.override.yml build
