@@ -15,8 +15,8 @@ jobs:
     - name: Create docker-compose.override.yml
       run: |
         echo "${{ secrets.DOCKER_COMPOSE_CI }}" > docker-compose.override.yml
-    - uses: astappiev/docker-compose-remote-action@master
-      name: Docker-Compose Remote Deployment
+    - name: Docker Compose Remote (SSH) Deploy
+      uses: astappiev/docker-compose-remote-action@v1
       with:
         ssh_host: ${{ secrets.DEPLOY_HOST }}
         ssh_user: ${{ secrets.DEPLOY_USERNAME }}
