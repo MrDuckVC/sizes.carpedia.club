@@ -8,6 +8,8 @@ jobs:
     runs-on: self-hosted
     steps:
     - uses: actions/checkout@v3
+      with:
+        clean: false
 #    - name: Create env file
 #      run: |
 #        echo "${{ secrets.DB_ENV_FILE }}" > database.env
@@ -37,7 +39,9 @@ jobs:
         docker compose -p carpedia -f docker-compose.yml -f docker-compose.override-ci.yml push
     - name: Deploy
       run: |
+          docker compose -p carpedia -f docker-compose.yml -f docker-compose.override-ci.yml down --remove-orphans
           docker compose -p carpedia -f docker-compose.yml -f docker-compose.override-ci.yml up -d
+          docker compose -p carpedia -f docker-compose.yml -f docker-compose.override-ci.yml run --rm start_dependencies
     - name: Cleanup
       run: |
           docker system prune -f
