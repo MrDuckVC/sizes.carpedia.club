@@ -33,8 +33,8 @@ jobs:
         docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
     - name: Build and push
       run: |
-        docker compose -p carpedia -f docker-compose.yml -f docker-compose.override.yml build
-        docker compose -p carpedia -f docker-compose.yml -f docker-compose.override.yml push
+        docker compose -p carpedia -f docker-compose.yml -f docker-compose.override-ci.yml build
+        docker compose -p carpedia -f docker-compose.yml -f docker-compose.override-ci.yml push
     - name: Deploy
       run: |
           docker compose -p carpedia -f docker-compose.yml -f docker-compose.override-ci.yml up -d
