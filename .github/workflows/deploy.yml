@@ -24,9 +24,6 @@ jobs:
 #        ssh_host_public_key: ${{ secrets.DEPLOY_PUBLIC_KEY }}
 #        docker_compose_prefix: carpedia
     # Deploy on self hosted runner
-    - name: Copy docker-compose.override.yml
-      run: |
-        echo docker-compose.override-ci.yml > docker-compose.override.yml
     - name: Copy database.env
       run: |
           echo "${{ secrets.DB_ENV_FILE }}" > database.env
@@ -40,7 +37,7 @@ jobs:
         docker compose -p carpedia -f docker-compose.yml -f docker-compose.override.yml push
     - name: Deploy
       run: |
-          docker compose -p carpedia -f docker-compose.yml -f docker-compose.override.yml up -d
+          docker compose -p carpedia -f docker-compose.yml -f docker-compose.override-ci.yml up -d
     - name: Cleanup
       run: |
           docker system prune -f
