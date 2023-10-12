@@ -3,7 +3,7 @@ services:
     restart: unless-stopped
     image: nginx:alpine
     volumes:
-      - ./docker/nginx/conf.dev.d:/etc/nginx/conf.d:ro
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d:ro
     ports:
       - 8000:80
 
