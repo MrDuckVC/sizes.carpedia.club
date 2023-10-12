@@ -8,24 +8,6 @@ jobs:
     runs-on: self-hosted
     steps:
     - uses: actions/checkout@v3
-      with:
-        clean: false
-#    - name: Create env file
-#      run: |
-#        echo "${{ secrets.DB_ENV_FILE }}" > database.env
-#        echo "${{ secrets.WEB_ENV_FILE }}" > web.env
-#    - name: Create docker-compose.override.yml
-#      run: |
-#        echo "${{ secrets.DOCKER_COMPOSE_CI }}" > docker-compose.override.yml
-#    - uses: astappiev/docker-compose-remote-action@master
-#      name: Docker-Compose Remote Deployment
-#      with:
-#        ssh_host: ${{ secrets.DEPLOY_HOST }}
-#        ssh_user: ${{ secrets.DEPLOY_USERNAME }}
-#        ssh_private_key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
-#        ssh_host_public_key: ${{ secrets.DEPLOY_PUBLIC_KEY }}
-#        docker_compose_prefix: carpedia
-    # Deploy on self hosted runner
     - name: Copy database.env
       run: |
           echo "${{ secrets.DB_ENV_FILE }}" > database.env
@@ -41,7 +23,6 @@ jobs:
       run: |
           docker compose -p carpedia -f docker-compose.yml -f docker-compose.override-ci.yml down --remove-orphans
           docker compose -p carpedia -f docker-compose.yml -f docker-compose.override-ci.yml up -d
-          docker compose -p carpedia -f docker-compose.yml -f docker-compose.override-ci.yml run --rm start_dependencies
     - name: Cleanup
       run: |
           docker system prune -f
