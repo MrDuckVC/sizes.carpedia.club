@@ -10,6 +10,7 @@ docker-compose.override.yml
 
 # Virtualenv
 database.env
+web.env
 
 # DB data
 docker/db/data

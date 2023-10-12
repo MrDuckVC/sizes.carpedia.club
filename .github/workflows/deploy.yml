@@ -7,22 +7,32 @@ jobs:
   deploy:
     runs-on: self-hosted
     steps:
-    - uses: actions/checkout@v3
-    - name: Copy database.env
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Copy environment files
       run: |
-          echo "${{ secrets.DB_ENV_FILE }}" > database.env
+        touch database.env
+        echo "MYSQL_DATABASE=${{ variables.MYSQL_DATABASE }}" >> database.env
+        echo "MYSQL_USER=${{ variables.MYSQL_USER }} >> database.env
+        echo "MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} >> database.env
+        echo "MYSQL_HOST=${{ variables.MYSQL_HOST }} >> database.env
+        echo "MYSQL_PORT=${{ variables.MYSQL_PORT }} >> database.env
+        touch web.env
+        echo "DEBUG=0" >> web.env
+        echo "ALLOWED_HOSTS=${{ secrets.ALLOWED_HOSTS }}" >> web.env
+        echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> web.env
     - name: Login to DockerHub using token
       run: |
         whoami
         docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
     - name: Build and push
       run: |
-        docker compose -p carpedia -f docker-compose.yml -f docker-compose.override-ci.yml build
-        docker compose -p carpedia -f docker-compose.yml -f docker-compose.override-ci.yml push
+        docker compose -p ${{ variebles.DOCKER_PROJECT_NAME }} -f docker-compose.yml -f docker-compose.override-ci.yml build
+        docker compose -p ${{ variebles.DOCKER_PROJECT_NAME }} -f docker-compose.yml -f docker-compose.override-ci.yml push
     - name: Deploy
       run: |
-          docker compose -p carpedia -f docker-compose.yml -f docker-compose.override-ci.yml down --remove-orphans
-          docker compose -p carpedia -f docker-compose.yml -f docker-compose.override-ci.yml up -d
+          docker compose -p ${{ variebles.DOCKER_PROJECT_NAME }} -f docker-compose.yml -f docker-compose.override-ci.yml down --remove-orphans
+          docker compose -p ${{ variebles.DOCKER_PROJECT_NAME }} -f docker-compose.yml -f docker-compose.override-ci.yml up -d
     - name: Cleanup
       run: |
           docker system prune -f
