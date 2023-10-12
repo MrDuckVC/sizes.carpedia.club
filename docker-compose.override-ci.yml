@@ -1,6 +1,3 @@
-extra_hosts:
-  - "host.docker.internal:host-gateway"
-
 services:
   nginx:
     restart: unless-stopped
@@ -9,3 +6,7 @@ services:
       - ./docker/nginx/conf.dev.d:/etc/nginx/conf.d:ro
     ports:
       - 8000:80
+
+  web:
+    extra_hosts:
+    - "host.docker.internal:host-gateway"
