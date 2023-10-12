@@ -12,15 +12,15 @@ jobs:
     - name: Copy environment files
       run: |
         touch database.env
-        echo "MYSQL_DATABASE=${{ env.MYSQL_DATABASE }} >> database.env
-        echo "MYSQL_USER=${{ env.MYSQL_USER }} >> database.env
-        echo "MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} >> database.env
-        echo "MYSQL_HOST=${{ env.MYSQL_HOST }} >> database.env
-        echo "MYSQL_PORT=${{ env.MYSQL_PORT }} >> database.env
+        echo MYSQL_DATABASE=${{ env.MYSQL_DATABASE }} >> database.env
+        echo MYSQL_USER=${{ env.MYSQL_USER }} >> database.env
+        echo MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} >> database.env
+        echo MYSQL_HOST=${{ env.MYSQL_HOST }} >> database.env
+        echo MYSQL_PORT=${{ env.MYSQL_PORT }} >> database.env
         touch web.env
-        echo "DEBUG=0" >> web.env
-        echo "ALLOWED_HOSTS=${{ secrets.ALLOWED_HOSTS }}" >> web.env
-        echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> web.env
+        echo DEBUG=0 >> web.env
+        echo ALLOWED_HOSTS=${{ secrets.ALLOWED_HOSTS }} >> web.env
+        echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> web.env
     - name: Login to DockerHub using token
       run: |
         whoami
