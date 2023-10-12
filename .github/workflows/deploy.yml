@@ -12,11 +12,11 @@ jobs:
     - name: Copy environment files
       run: |
         touch database.env
-        echo "MYSQL_DATABASE=${{ variables.MYSQL_DATABASE }}" >> database.env
-        echo "MYSQL_USER=${{ variables.MYSQL_USER }} >> database.env
+        echo "MYSQL_DATABASE=${{ env.MYSQL_DATABASE }} >> database.env
+        echo "MYSQL_USER=${{ env.MYSQL_USER }} >> database.env
         echo "MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} >> database.env
-        echo "MYSQL_HOST=${{ variables.MYSQL_HOST }} >> database.env
-        echo "MYSQL_PORT=${{ variables.MYSQL_PORT }} >> database.env
+        echo "MYSQL_HOST=${{ env.MYSQL_HOST }} >> database.env
+        echo "MYSQL_PORT=${{ env.MYSQL_PORT }} >> database.env
         touch web.env
         echo "DEBUG=0" >> web.env
         echo "ALLOWED_HOSTS=${{ secrets.ALLOWED_HOSTS }}" >> web.env
@@ -27,12 +27,12 @@ jobs:
         docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
     - name: Build and push
       run: |
-        docker compose -p ${{ variebles.DOCKER_PROJECT_NAME }} -f docker-compose.yml -f docker-compose.override-ci.yml build
-        docker compose -p ${{ variebles.DOCKER_PROJECT_NAME }} -f docker-compose.yml -f docker-compose.override-ci.yml push
+        docker compose -p ${{ env.DOCKER_PROJECT_NAME }} -f docker-compose.yml -f docker-compose.override-ci.yml build
+        docker compose -p ${{ env.DOCKER_PROJECT_NAME }} -f docker-compose.yml -f docker-compose.override-ci.yml push
     - name: Deploy
       run: |
-          docker compose -p ${{ variebles.DOCKER_PROJECT_NAME }} -f docker-compose.yml -f docker-compose.override-ci.yml down --remove-orphans
-          docker compose -p ${{ variebles.DOCKER_PROJECT_NAME }} -f docker-compose.yml -f docker-compose.override-ci.yml up -d
+          docker compose -p ${{ env.DOCKER_PROJECT_NAME }} -f docker-compose.yml -f docker-compose.override-ci.yml down --remove-orphans
+          docker compose -p ${{ env.DOCKER_PROJECT_NAME }} -f docker-compose.yml -f docker-compose.override-ci.yml up -d
     - name: Cleanup
       run: |
           docker system prune -f
