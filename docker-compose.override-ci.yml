@@ -7,6 +7,18 @@ services:
     ports:
       - 8000:80
 
-  web:
-    extra_hosts:
-    - "host.docker.internal:host-gateway"
+  db:
+    image: mariadb
+    volumes:
+      - ./docker/db/data:/var/lib/mysql
+      - ./docker/db/db-init:/docker-entrypoint-initdb.d
+    env_file:
+      - ./database.env
+
+  start_dependencies:
+    build: ./docker/start_dependencies
+    depends_on:
+      - web
+    command: db:3306 /var/run/python/uwsgi.sock
+    volumes:
+      - python_sock:/var/run/python
