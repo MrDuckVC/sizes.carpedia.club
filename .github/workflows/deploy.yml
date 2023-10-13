@@ -12,7 +12,7 @@ jobs:
     # Instead of checkout, we can use the following to clone the repo
     - name: Clean up and clone
       run: |
-        rm -rf ${{ github.workspace }}/* !(${{ github.workspace }}/.git|docker/db/data|backend/static|backend/media|__pycache__)
+        rm -rf !(${{ github.workspace }}/.git|docker/db/data|backend/static|backend/media|__pycache__)
         git clone
     - name: Copy environment files
       run: |
