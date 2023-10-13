@@ -7,8 +7,13 @@ jobs:
   deploy:
     runs-on: self-hosted
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+#    - name: Checkout
+#      uses: actions/checkout@v3
+    # Instead of checkout, we can use the following to clone the repo
+    - name: Clean up and clone
+      run: |
+        rm -rf ${{ github.workspace }}/* !(${{ github.workspace }}/.git|docker/db/data|backend/static|backend/media|__pycache__)
+        git clone
     - name: Copy environment files
       run: |
         touch database.env
@@ -31,8 +36,12 @@ jobs:
         docker compose -p ${{ vars.DOCKER_PROJECT_NAME }} -f docker-compose.yml -f docker-compose.override-ci.yml push
     - name: Deploy
       run: |
-          docker compose -p ${{ vars.DOCKER_PROJECT_NAME }} -f docker-compose.yml -f docker-compose.override-ci.yml down --remove-orphans
-          docker compose -p ${{ vars.DOCKER_PROJECT_NAME }} -f docker-compose.yml -f docker-compose.override-ci.yml up -d
+        docker compose -p ${{ vars.DOCKER_PROJECT_NAME }} -f docker-compose.yml -f docker-compose.override-ci.yml down --remove-orphans
+        docker compose -p ${{ vars.DOCKER_PROJECT_NAME }} -f docker-compose.yml -f docker-compose.override-ci.yml up -d
+        docker compose -p ${{ vars.DOCKER_PROJECT_NAME }} -f docker-compose.yml -f docker-compose.override-ci.yml run --rm start_dependencies
+        docker compose -p ${{ vars.DOCKER_PROJECT_NAME }} -f docker-compose.yml -f docker-compose.override-ci.yml run --rm web python3 manage.py migrate
+        docker compose -p ${{ vars.DOCKER_PROJECT_NAME }} -f docker-compose.yml -f docker-compose.override-ci.yml run --rm web python3 manage.py collectstatic --no-input --ignore=*.scss
+        docker compose -p ${{ vars.DOCKER_PROJECT_NAME }} -f docker-compose.yml -f docker-compose.override-ci.yml restart web
     - name: Cleanup
       run: |
           docker system prune -f
