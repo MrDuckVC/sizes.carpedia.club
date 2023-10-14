@@ -7,13 +7,12 @@ jobs:
   deploy:
     runs-on: self-hosted
     steps:
-#    - name: Checkout
-#      uses: actions/checkout@v3
-    # Instead of checkout, we can use the following to clone the repo
-    - name: Clean up and clone
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Prepare environment
       run: |
-        rm -rf !(${{ github.workspace }}/.git|docker/db/data|backend/static|backend/media|__pycache__)
-        git clone
+        rsync -aH --exclude=docker/db/data --exclude=backend/static --exclude=backend/media --exclude=__pycache__ ./ /var/www/html/{{ vars.DOCKER_PROJECT_NAME }}
+        cd /var/www/html/{{ vars.DOCKER_PROJECT_NAME }}
     - name: Copy environment files
       run: |
         touch database.env
