@@ -12,20 +12,6 @@ jobs:
     - name: Prepare environment
       run: |
         rsync -aH --exclude=docker/db/data --exclude=backend/static --exclude=backend/media --exclude=__pycache__ ./ /var/www/html/${{ vars.DOCKER_PROJECT_NAME }}
-    - name: Copy environment files
-      run: |
-        cd /var/www/html/${{ vars.DOCKER_PROJECT_NAME }}
-        touch database.env
-        echo MYSQL_DATABASE=${{ vars.MYSQL_ROOT_PASSWORD }} >> database.env
-        echo MYSQL_DATABASE=${{ vars.MYSQL_DATABASE }} >> database.env
-        echo MYSQL_USER=${{ vars.MYSQL_USER }} >> database.env
-        echo MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} >> database.env
-        echo MYSQL_HOST=${{ vars.MYSQL_HOST }} >> database.env
-        echo MYSQL_PORT=${{ vars.MYSQL_PORT }} >> database.env
-        touch web.env
-        echo DEBUG=1 >> web.env
-        echo ALLOWED_HOSTS=${{ vars.ALLOWED_HOSTS }} >> web.env
-        echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> web.env
     - name: Login to DockerHub using token
       run: |
         cd /var/www/html/${{ vars.DOCKER_PROJECT_NAME }}
