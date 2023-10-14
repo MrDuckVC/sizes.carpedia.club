@@ -17,3 +17,9 @@ docker/db/data
 
 # Static files
 backend/static/*
+
+# Media files
+backend/media/*
+
+# Python bytecode
+__pycache__/
