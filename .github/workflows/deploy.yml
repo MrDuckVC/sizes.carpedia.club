@@ -11,7 +11,8 @@ jobs:
       uses: actions/checkout@v3
     - name: Prepare environment
       run: |
-        rsync -aH --exclude=docker/db/data --exclude=backend/static --exclude=backend/media --exclude=__pycache__ ./ /var/www/html/{{ vars.DOCKER_PROJECT_NAME }}
+        rsync -aH --exclude=docker/db/data --exclude=backend/static --exclude=backend/media --exclude=__pycache__ ./ /var/www/html/${{ vars.DOCKER_PROJECT_NAME }}
+        cd /var/www/html/${{ vars.DOCKER_PROJECT_NAME }}
     - name: Copy environment files
       run: |
         pwd
