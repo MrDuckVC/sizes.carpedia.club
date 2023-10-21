@@ -75,7 +75,7 @@ class CategoryGroupView(ExtraHTMLCodeMixin, View):
 
 class CategoryView(ExtraHTMLCodeMixin, View):
     def get(self, request, slug: str):
-        category = get_object_or_404(Category, slug=slug)
+        category = get_object_or_404(Category, slug=slug, enabled=True)
 
         # Search by sizes form.
         search_by_sizes_form = SearchBySizesForm(category=category, data=request.GET)

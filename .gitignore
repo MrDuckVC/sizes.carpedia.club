@@ -13,7 +13,7 @@ database.env
 web.env
 
 # DB data
-docker/db/data
+docker/db/data/*
 
 # Static files
 backend/static/*
