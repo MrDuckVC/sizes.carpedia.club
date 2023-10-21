@@ -3,8 +3,8 @@
 
 <tr>
     <td>
-        {% if auto_part.image %}
-            <img src="{{ auto_part.image.image.url }}" alt="{{ auto_part.number }}" class="img-fluid">
+        {% if auto_part.get_image_url %}
+            <img src="{{ auto_part.get_image_url }}" alt="{{ auto_part.number }}" class="img-fluid">
         {% else %}
             <img src="{% static 'catalog/images/no_image.png' %}" alt="No image" class="img-fluid">
         {% endif %}

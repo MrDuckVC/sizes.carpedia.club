@@ -140,6 +140,14 @@ class AutoPart(models.Model):
     def __str__(self):
         return self.number
 
+    def get_image_url(self):
+        if self.image:
+            try:
+                return self.image.image.url
+            except ValueError:
+                return None
+        return None
+
 
 class ExtraHTMLCode(models.Model):
     name = models.CharField(max_length=50, unique=True)
