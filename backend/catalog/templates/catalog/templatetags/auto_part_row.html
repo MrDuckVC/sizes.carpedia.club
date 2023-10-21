@@ -13,6 +13,10 @@
     <td>{{ auto_part.brand }}</td>
     <td>{{ auto_part.description|truncatechars:40 }}</td>
     {% for size in auto_part.category.sizes.all %}
-        <td>{{ auto_part.sizes_values|get_item:size.name }}</td>
+        {% if auto_part.sizes_values|get_item:size.name %}
+            <td>{{ auto_part.sizes_values|get_item:size.name }}</td>
+        {% else %}
+            <td></td>
+        {% endif %}
     {% endfor %}
 </tr>
