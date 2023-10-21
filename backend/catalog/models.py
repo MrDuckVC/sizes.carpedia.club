@@ -80,7 +80,9 @@ class Size(models.Model):
         ordering = [F("name").asc()]
 
     def __str__(self):
-        return f"{self.name} ({self.description})"
+        if self.description:
+            return f"{self.name} ({self.description})"
+        return f"{self.name}"
 
 
 class Category(models.Model):
