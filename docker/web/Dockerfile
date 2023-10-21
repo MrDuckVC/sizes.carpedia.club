@@ -30,6 +30,7 @@ WORKDIR /var/www/backend
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
+        libtidy-dev \
         libmariadb3 && \
     rm -rf /var/lib/apt/lists/*
 
