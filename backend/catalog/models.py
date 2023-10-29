@@ -1,7 +1,5 @@
-from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import F
-from tidylib import tidy_document
 
 from .utils import slugify, code_validator
 
@@ -91,6 +89,7 @@ class Category(models.Model):
     slug = models.SlugField(unique=True, max_length=50)
     description = models.TextField(blank=True, null=True)
     image = models.ImageField(blank=True, null=True)
+    description_image = models.ImageField(blank=True, null=True)
     sizes = models.ManyToManyField(Size, blank=True)
     weight = models.IntegerField(blank=True, null=True)
     enabled = models.BooleanField(default=True)
