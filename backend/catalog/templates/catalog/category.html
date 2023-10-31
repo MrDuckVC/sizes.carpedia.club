@@ -78,9 +78,8 @@
                 {% endfor %}
             </tbody>
         </table>
+        <div class="d-flex justify-content-center">
+            {% bootstrap_pagination page_obj %}
+        </div>
     {% endif %}
-    <div class="d-flex justify-content-center">
-        {% bootstrap_pagination page_obj %}
-    </div>
-
 {% endblock %}
