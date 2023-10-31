@@ -7,6 +7,7 @@ from .utils import slugify, code_validator
 class HTMLCodeType(models.TextChoices):
     HEAD = "head"
     BODY = "body"
+    FOOTER = "footer"
 
 
 # Auto part size enum description
