@@ -28,6 +28,14 @@ class ExtraHTMLCodeMixin:
         """
         return ExtraHTMLCode.objects.filter(type=HTMLCodeType.BODY, enabled=True).all()
 
+    @staticmethod
+    def get_footer_html_code():
+        """
+        Get footer HTML code.
+        :return: QuerySet
+        """
+        return ExtraHTMLCode.objects.filter(type=HTMLCodeType.FOOTER, enabled=True).all()
+
     def get_context_data(self, **kwargs):
         """
         Add head and body HTML code to context.
@@ -37,6 +45,7 @@ class ExtraHTMLCodeMixin:
         context = kwargs
         context["head_html_code"] = self.get_head_html_code()
         context["body_html_code"] = self.get_body_html_code()
+        context["footer_html_code"] = self.get_footer_html_code()
         return context
 
 
