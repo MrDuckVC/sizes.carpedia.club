@@ -70,6 +70,7 @@ class Size(models.Model):
     description = models.TextField(blank=True)
     type = models.CharField(max_length=20, choices=AutoPartSizeType.choices, default=AutoPartSizeType.INTEGER)
     data = models.JSONField(blank=True, null=True)  # For choices, min, max, etc.
+    detailed_description = models.TextField(blank=True, default="")
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
